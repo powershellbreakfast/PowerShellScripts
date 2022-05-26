@@ -1,4 +1,4 @@
-#A simple Script to create local Admin account with no password
+#A simple Script to create local Admin account with a password
 
 $localadmin = "Admin"
 $localadminpassword = ConvertTo-SecureString 'your_password' -AsPlainText -Force
