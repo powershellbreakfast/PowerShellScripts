@@ -6,7 +6,7 @@ $cpuname = (Get-computerInfo).CsProcessors.Name
 #get web page for processor name
 $request = Invoke-WebRequest -Method GET -Uri 'https://www.cpubenchmark.net/cpu.php' -Body @{'cpu'="$cpuname"}
 
-#Find exact element that is formated as specified which is score
+#Find exact element that is formated as specified which contains the Passmark benchmark score that we desire
 $element = $request.ParsedHtml.getElementsByTagName('span') | where-object {$_.outerHTML -like '<SPAN style="FONT-SIZE: 44px; FONT-FAMILY: Arial, Helvetica, sans-serif; FONT-WEIGHT: bold; COLOR: #f48a18">*</SPAN>'}
 
 #get Score Number from element selected
