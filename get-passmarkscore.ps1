@@ -12,5 +12,8 @@ $element = $request.ParsedHtml.getElementsByTagName('span') | where-object {$_.o
 #get Score Number from element selected
 $score = $element.innerHTML
 
+#show host
+Write-Host $score -ForegroundColor Green
+
 #set Textfile contents to score
 Set-Content -Path C:\temp\cpuscore.txt -Value $score
