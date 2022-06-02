@@ -1,19 +1,25 @@
+Start-Transcript -Force -Path C:\PowershellLogs\getpassmarkscore.log
 #This script gets the passmark score of your PC's PRocessors by Webscraping
 
 #get proccessor name
 $cpuname = (Get-computerInfo).CsProcessors.Name 
 
 #get web page for processor name
-$request = Invoke-WebRequest -Method GET -Uri 'https://www.cpubenchmark.net/cpu.php' -Body @{'cpu'="$cpuname"}
+$request = Invoke-WebRequest -Method GET -Uri 'https://www.cpubenchmark.net/cpu.php' -UseBasicParsing -Body @{'cpu'="$cpuname"}
 
-#Find exact element that is formated as specified which contains the Passmark benchmark score that we desire
-$element = $request.ParsedHtml.getElementsByTagName('span') | where-object {$_.outerHTML -like '<SPAN style="FONT-SIZE: 44px; FONT-FAMILY: Arial, Helvetica, sans-serif; FONT-WEIGHT: bold; COLOR: #f48a18">*</SPAN>'}
+#Find exact element that is formated as specified which is score 
+#regex MATCH 0-9 4 to unlimited times 
+$request.Content -match 'value: [0-9]{4,},'
+
+#get 1st match
+$string = $Matches[0]
 
 #get Score Number from element selected
-$score = $element.innerHTML
-
-#show host
-Write-Host $score -ForegroundColor Green
+$score = $string.Replace("value: ","").Replace(",","")
 
 #set Textfile contents to score
-Set-Content -Path C:\temp\cpuscore.txt -Value $score
+Set-Content -Path C:\kworking\cpuscore.txt -Value $score
+
+Write-Host $score
+
+Stop-Transcript
